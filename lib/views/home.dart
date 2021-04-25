@@ -76,50 +76,60 @@ class HomeScreen extends StatelessWidget {
 
                         return todos.isEmpty
                             ? Text('You have not added any todo')
-                            : ListView.builder(
-                                itemBuilder: (context, index) {
-                                  Todo currentTodo = todos[index];
-                                  return Card(
-                                    child: GestureDetector(
-                                      onTap: (){
-                                        currentTodo.isCompleted = !currentTodo.isCompleted;
-                                        todoProvider.toggleTodoCompletion(currentTodo);
-                                        
-                                      },
-                                      child: Container(
-                                        padding: EdgeInsets.all(10),
-                                        height: 100,
-                                        color: currentTodo.isCompleted
-                                            ? Colors.greenAccent
-                                            : Colors.red,
-                                        child: Row(
-                                          children: [
-                                            Expanded(
-                                              child: Column(
+                            : Column(
+                                children: [
+                                  Text('Tap on each todo to toggle completion'),
+                                  SizedBox(height: 20,),
+                                  Expanded(
+                                    child: ListView.builder(
+                                      itemBuilder: (context, index) {
+                                        Todo currentTodo = todos[index];
+                                        return Card(
+                                          child: GestureDetector(
+                                            onTap: () {
+                                              currentTodo.isCompleted =
+                                                  !currentTodo.isCompleted;
+                                              todoProvider.toggleTodoCompletion(
+                                                  currentTodo);
+                                            },
+                                            child: Container(
+                                              padding: EdgeInsets.all(20),
+                                              
+                                              color: currentTodo.isCompleted
+                                                  ? Colors.greenAccent
+                                                  : Colors.red,
+                                              child: Row(
                                                 children: [
-                                                  Text(currentTodo.title),
-                                                  SizedBox(height: 10),
-                                                  Text(currentTodo.description),
+                                                  Expanded(
+                                                    child: Column(
+                                                      children: [
+                                                        Text(currentTodo.title),
+                                                        SizedBox(height: 10),
+                                                        Text(currentTodo
+                                                            .description),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                  SizedBox(width: 20),
+                                                  GestureDetector(
+                                                    onTap: () {
+                                                      todoProvider.deleteTodo(
+                                                          currentTodo);
+                                                    },
+                                                    child: Icon(
+                                                      Icons.delete,
+                                                    ),
+                                                  ),
                                                 ],
                                               ),
                                             ),
-                                            SizedBox(width: 20),
-                                            GestureDetector(
-                                              onTap: () {
-                                                todoProvider
-                                                    .deleteTodo(currentTodo);
-                                              },
-                                              child: Icon(
-                                                Icons.delete,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
+                                          ),
+                                        );
+                                      },
+                                      itemCount: todoProvider.todos.length,
                                     ),
-                                  );
-                                },
-                                itemCount: todoProvider.todos.length,
+                                  ),
+                                ],
                               );
                       },
                     ),
